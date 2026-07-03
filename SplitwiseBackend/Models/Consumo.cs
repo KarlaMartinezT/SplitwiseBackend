@@ -5,24 +5,23 @@ namespace SplitwiseBackend.Models
 {
     public class Consumo
     {
-        [Key] //indica llave primaria d la tabla
+        [Key]
         public int Id { get; set; }
 
-        [Column("usuario_id")] //mapeo a la columna real d la bd
+        [Column("usuario_id")]
+        [ForeignKey("Usuario")] //la llave del objeto Usuario
         public int IdUsuario { get; set; }
 
-        [Column("cuenta_id")] //mapeo a la columna real d la bd
+        [Column("cuenta_id")]
+        [ForeignKey("Cuenta")]  //la llave del objeto Cuenta
         public int IdCuenta { get; set; }
 
         [Column("platillo_nombre")]
         public string PlatilloNombre { get; set; } = string.Empty;
+
         public decimal Precio { get; set; }
 
-        [ForeignKey("IdUsuario")] //indica que la propiedad Usuario es una clave foranea que hace referencia a la propiedad IdUsuario
         public Usuario? Usuario { get; set; }
-
-        [ForeignKey("IdCuenta")] //indica que la propiedad Cuenta es una clave foranea que hace referencia a la propiedad IdCuenta
         public Cuenta? Cuenta { get; set; }
-
     }
 }

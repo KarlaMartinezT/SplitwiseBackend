@@ -8,23 +8,44 @@ namespace SplitwiseBackend.Services
         {
             Dictionary<int, decimal> balances = new Dictionary<int, decimal>();
 
-            // 1. Inicializar el balance de cada usuario en 0
+            //Inicializar el balance de cada usuario en 0
             foreach (var usuario in usuarios)
             {
                 balances[usuario.Id] = 0;
             }
 
-            // 2. Recorrer cada consumo registrado para sumar y restar
+            //Recorrer cada consumo registrado para sumar pagos y restar deudas
             foreach (var consumo in consumos)
             {
-                // Supongamos que tu modelo Consumo tiene:
-                // - UsuarioId (quien pagó)
-                // - Monto (cuánto costó)
-
-                // A la persona que pagó le sumamos el total del gasto a su favor
+                //A la persona que pagó el platillo se le suma el total a favor
                 if (balances.ContainsKey(consumo.IdUsuario))
                 {
                     balances[consumo.IdUsuario] += consumo.Precio;
+                }
+
+                //Restar la parte que le toca a cada quien
+                if (consumo.EsCompartido)
+                {
+                    // Si es compartido, el precio se divide entre todos los usuarios
+                    if (usuarios.Count > 0)
+                    {
+                        decimal costoPorPersona = consumo.Precio / usuarios.Count;
+                        foreach (var usuario in usuarios)
+                        {
+                            if (balances.ContainsKey(usuario.Id))
+                            {
+                                balances[usuario.Id] -= costoPorPersona;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    // Si es individual, por ahora se le descuenta a quien lo pagó
+                    if (balances.ContainsKey(consumo.IdUsuario))
+                    {
+                        balances[consumo.IdUsuario] -= consumo.Precio;
+                    }
                 }
             }
 

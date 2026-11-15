@@ -23,5 +23,9 @@ namespace SplitwiseBackend.Models
 
         public Usuario? Usuario { get; set; }
         public Cuenta? Cuenta { get; set; }
+
+        // Si es true, se divide entre todos los participantes de la cuenta.
+        // Si es false, le pertenece únicamente al IdUsuario que lo registró.
+        public bool EsCompartido { get; set; } = true;
     }
 }
